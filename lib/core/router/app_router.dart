@@ -6,7 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/teachers/presentation/pages/teachers_page.dart';
-
+import '../../features/students/presentation/pages/students_page.dart';
+import '../../features/unpaid/presentation/pages/unpaid_students_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -25,10 +26,7 @@ class AppRouter {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginPage(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       ShellRoute(
         builder: (context, state, child) => MainLayout(child: child),
         routes: [
@@ -38,11 +36,15 @@ class AppRouter {
           ),
           GoRoute(
             path: '/students',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const StudentsPage(),
+          ),
+          GoRoute(
+            path: '/unpaid-students',
+            builder: (context, state) => const UnpaidStudentsPage(),
           ),
           GoRoute(
             path: '/courses',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const CoursesPage(),
           ),
           GoRoute(
             path: '/payments',
@@ -97,17 +99,11 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
+            decoration: BoxDecoration(color: Colors.blue),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.school,
-                  size: 48,
-                  color: Colors.white,
-                ),
+                Icon(Icons.school, size: 48, color: Colors.white),
                 SizedBox(height: 16),
                 Text(
                   'EduNova',
@@ -119,10 +115,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 Text(
                   'Education Management',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ],
             ),
@@ -138,6 +131,13 @@ class AppDrawer extends StatelessWidget {
             title: 'Students',
             path: '/students',
             isSelected: currentLocation == '/students',
+          ),
+          _DrawerItem(
+            icon: Icons.warning,
+            title: 'Unpaid Students',
+            path: '/unpaid-students',
+            isSelected: currentLocation == '/unpaid-students',
+            badgeColor: Colors.red,
           ),
           _DrawerItem(
             icon: Icons.book,
@@ -160,10 +160,7 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.red),
-            ),
+            title: const Text('Logout', style: TextStyle(color: Colors.red)),
             onTap: () {
               context.read<AuthBloc>().add(LogoutEvent());
             },
@@ -179,20 +176,36 @@ class _DrawerItem extends StatelessWidget {
   final String title;
   final String path;
   final bool isSelected;
+  final Color? badgeColor;
 
   const _DrawerItem({
     required this.icon,
     required this.title,
     required this.path,
     required this.isSelected,
+    this.badgeColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Colors.blue : null,
+      leading: Stack(
+        children: [
+          Icon(icon, color: isSelected ? Colors.blue : null),
+          if (badgeColor != null)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: badgeColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+        ],
       ),
       title: Text(
         title,

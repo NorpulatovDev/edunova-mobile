@@ -6,6 +6,11 @@ import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/teachers/data/repositories/teacher_repository.dart';
 import '../../features/teachers/presentation/bloc/teacher_bloc.dart';
+import '../../features/students/data/repositories/student_repository.dart';
+import '../../features/students/presentation/bloc/student_bloc.dart';
+
+import '../../features/unpaid/data/repositories/unpaid_repository.dart';
+import '../../features/unpaid/presentation/bloc/unpaid_bloc.dart';
 import '../network/api_client.dart';
 import '../storage/storage_service.dart';
 
@@ -42,6 +47,13 @@ Future<void> setupInjection() async {
     () => TeacherRepositoryImpl(getIt<ApiClient>()),
   );
 
+  getIt.registerLazySingleton<StudentRepositoryImpl>(
+    () => StudentRepositoryImpl(getIt<ApiClient>()),
+  );
+
+  getIt.registerLazySingleton<UnpaidPaymentRepositoryImpl>(
+    () => UnpaidPaymentRepositoryImpl(getIt<ApiClient>()),
+  );
 
   // BLoCs
   getIt.registerFactory<AuthBloc>(
@@ -52,4 +64,11 @@ Future<void> setupInjection() async {
     () => TeacherBloc(getIt<TeacherRepositoryImpl>()),
   );
 
+  getIt.registerFactory<StudentBloc>(
+    () => StudentBloc(getIt<StudentRepositoryImpl>()),
+  );
+
+  getIt.registerFactory<UnpaidBloc>(
+    () => UnpaidBloc(getIt<UnpaidPaymentRepositoryImpl>()),
+  );
 }
