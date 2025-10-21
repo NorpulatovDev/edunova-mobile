@@ -1,8 +1,10 @@
+// lib/features/teachers/presentation/pages/teachers_page.dart - Updated with salary functionality
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/injection.dart';
 import '../../data/models/teacher_models.dart';
 import '../bloc/teacher_bloc.dart';
+import '../widgets/teacher_salary_dialog.dart';
 
 class TeachersPage extends StatelessWidget {
   const TeachersPage({super.key});
@@ -112,6 +114,7 @@ class TeachersView extends StatelessWidget {
                         return Card(
                           margin: const EdgeInsets.only(bottom: 8),
                           child: ListTile(
+                            onTap: () => _showSalaryDialog(context, teacher),
                             leading: CircleAvatar(
                               backgroundColor: Colors.blue,
                               child: Text(
@@ -135,12 +138,19 @@ class TeachersView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
+                                  onPressed: () => _showSalaryDialog(context, teacher),
+                                  icon: const Icon(Icons.account_balance_wallet, color: Colors.green),
+                                  tooltip: 'View Salary',
+                                ),
+                                IconButton(
                                   onPressed: () => _showEditTeacherDialog(context, teacher),
                                   icon: const Icon(Icons.edit, color: Colors.blue),
+                                  tooltip: 'Edit Teacher',
                                 ),
                                 IconButton(
                                   onPressed: () => _showDeleteConfirmation(context, teacher),
                                   icon: const Icon(Icons.delete, color: Colors.red),
+                                  tooltip: 'Delete Teacher',
                                 ),
                               ],
                             ),
@@ -156,6 +166,14 @@ class TeachersView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showSalaryDialog(BuildContext context, Teacher teacher) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => TeacherSalaryDialog(teacher: teacher),
     );
   }
 

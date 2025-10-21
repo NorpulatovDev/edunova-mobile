@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-
+import '../../features/expenses/presentation/pages/expenses_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/payments/presentation/pages/payments_page.dart';
 import '../../features/teachers/presentation/pages/teachers_page.dart';
 import '../../features/students/presentation/pages/students_page.dart';
+import '../../features/courses/presentation/pages/courses_page.dart';
 import '../../features/unpaid/presentation/pages/unpaid_students_page.dart';
 
 class AppRouter {
@@ -48,11 +50,11 @@ class AppRouter {
           ),
           GoRoute(
             path: '/payments',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const PaymentsPage(),
           ),
           GoRoute(
             path: '/expenses',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const ExpensesPage(),
           ),
         ],
       ),
